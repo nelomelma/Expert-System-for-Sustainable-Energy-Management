@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expert System for Sustainable Energy</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1><i class="fa-solid fa-bolt"></i> Expert System for Sustainable Energy</h1>
+    <button class="header-btn" onclick="toggleDark()">
+      <i class="fa-solid fa-moon"></i> Dark Mode
+    </button>
+  </header>
+
+  <!-- HOME PAGE -->
+  <section id="homePage">
+    <div class="overlay"></div>
+    <div class="home-box">
+      <h1>Expert System for Sustainable Energy</h1>
+      <p>
+        Make smarter decisions about your energy usage, reduce cost, and lower environmental impact through clear recommendations.
+      </p>
+      <button onclick="startSystem()">Proceed Next</button>
+    </div>
+  </section>
+
+  <!-- MAIN SYSTEM -->
+  <section id="advisor" style="display: none;">
+    <div class="card">
+      <h2>Energy Advisor Form</h2>
+
+      <label for="energySource"><i class="fa-solid fa-plug"></i> Energy Source</label>
+      <select id="energySource">
+        <option value="grid">Grid</option>
+        <option value="solar">Solar</option>
+        <option value="wind">Wind</option>
+        <option value="hybrid">Hybrid</option>
+      </select>
+
+      <label for="consumption"><i class="fa-solid fa-gauge-high"></i> Consumption (kWh)</label>
+      <input type="number" id="consumption" min="1" placeholder="Enter energy consumption" />
+
+      <label for="time"><i class="fa-regular fa-clock"></i> Time of Usage</label>
+      <select id="time">
+        <option value="morning">Morning</option>
+        <option value="afternoon">Afternoon</option>
+        <option value="evening">Evening</option>
+        <option value="night">Night</option>
+      </select>
+
+      <label for="building"><i class="fa-solid fa-building"></i> Building Type</label>
+      <select id="building">
+        <option value="home">Home</option>
+        <option value="office">Office</option>
+        <option value="industry">Industry</option>
+        <option value="school">School</option>
+        <option value="hospital">Hospital</option>
+        <option value="university">University</option>
+        <option value="apartment">Apartment</option>
+        <option value="business">Small Business</option>
+      </select>
+
+      <label for="appliances"><i class="fa-solid fa-fan"></i> Main Appliance</label>
+      <select id="appliances">
+        <option value="ac">AC</option>
+        <option value="lights">Lights</option>
+        <option value="heater">Heater</option>
+        <option value="fridge">Fridge</option>
+        <option value="computers">Computers</option>
+        <option value="machines">Machines</option>
+        <option value="all">All</option>
+      </select>
+
+      <label for="occupants"><i class="fa-solid fa-users"></i> Occupants</label>
+      <input type="number" id="occupants" min="1" placeholder="Enter number of occupants" />
+
+      <label for="cost"><i class="fa-solid fa-dollar-sign"></i> Cost per kWh ($)</label>
+      <input type="number" id="cost" min="0.01" step="0.01" placeholder="Enter cost per kWh" />
+
+      <div class="button-group">
+        <button onclick="getAdvice()"><i class="fa-solid fa-lightbulb"></i> Get Recommendation</button>
+        <button onclick="savePDF()"><i class="fa-solid fa-file-pdf"></i> Save PDF Report</button>
+        <button onclick="showHistory()"><i class="fa-solid fa-clock-rotate-left"></i> Show Past Results</button>
+        <button onclick="resetForm()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+      </div>
+
+      <div id="loading" class="loading" style="display: none;">
+        Analysing energy profile...
+      </div>
+
+      <div id="result" class="result" style="display: none;"></div>
+
+      <div class="chart-box">
+        <h3>Energy Consumption Comparison</h3>
+        <div class="chart-wrapper">
+          <canvas id="consumptionChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <h3>Estimated Savings and CO₂ Reduction</h3>
+        <div class="chart-wrapper">
+          <canvas id="impactChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card quick-tips-card">
+      <h2>Quick Energy Saving Tips</h2>
+      <ul class="tips-list">
+        <li>Turn off appliances when they are not in use.</li>
+        <li>Use LED lights where possible.</li>
+        <li>Shift heavy energy usage to off-peak hours.</li>
+        <li>Keep AC and heating at moderate settings.</li>
+        <li>Maintain appliances regularly for better efficiency.</li>
+      </ul>
+    </div>
+
+    <div id="historyBox" class="card" style="display: none;"></div>
+
+    <div class="card feedback-card">
+      <h2>User Feedback</h2>
+      <p class="feedback-text">Share your opinion about the system.</p>
+
+      <label for="userName"><i class="fa-solid fa-user"></i> Your Name</label>
+      <input type="text" id="userName" placeholder="Enter your name" />
+
+      <label><i class="fa-solid fa-star"></i> Rating</label>
+      <div class="star-rating" id="starRating">
+        <i class="fa-regular fa-star star" data-value="1"></i>
+        <i class="fa-regular fa-star star" data-value="2"></i>
+        <i class="fa-regular fa-star star" data-value="3"></i>
+        <i class="fa-regular fa-star star" data-value="4"></i>
+        <i class="fa-regular fa-star star" data-value="5"></i>
+      </div>
+
+      <p id="avgRating" class="avg-rating">Average Rating: 0 / 5</p>
+
+      <label for="feedbackMessage"><i class="fa-solid fa-comment"></i> Feedback</label>
+      <textarea id="feedbackMessage" rows="4" placeholder="Write your feedback here..."></textarea>
+
+      <button onclick="saveFeedback()"><i class="fa-solid fa-paper-plane"></i> Submit Feedback</button>
+
+      <div id="feedbackList" class="feedback-list">
+        <h3>What Users Say</h3>
+
+        <div class="feedback-item">
+          <p><strong>Rahim</strong> - ⭐⭐⭐⭐⭐</p>
+          <p>This system is simple and helpful. I liked the clear recommendations.</p>
+        </div>
+
+        <div class="feedback-item">
+          <p><strong>Fatema</strong> - ⭐⭐⭐⭐</p>
+          <p>The interface looks clean and the graph makes the result easy to understand.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
