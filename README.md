@@ -2,13 +2,13 @@ Title: Expert System for Sustainable Energy Management: An Intelligent Web-Based
 =
 How to Use the System:
 1)	Enter the required inputs in the Energy Advisor Form: 
- -Energy source 
- -Consumption (kWh) 
--Time of usage 
--Building type 
--Main appliance 
--Number of occupants 
--Cost per kWh 
+•	Energy source 
+•	Consumption (kWh) 
+•	Time of usage 
+•	Building type 
+•	Main appliance 
+•	Number of occupants 
+•	Cost per kWh 
 2.	Click “Get Recommendation”. 
 3.	The system will display: 
 •	Recommended actions 
